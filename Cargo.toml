@@ -8,3 +8,9 @@ edition = "2018"
 [dependencies]
 assert_matches = "1.5"
 mio = { version = "0.7", features = ["os-poll", "net"]}
+
+[[example]]
+name = "echo_server_mt"
+
+[[example]]
+name = "echo_server_mio"

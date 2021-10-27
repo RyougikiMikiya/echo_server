@@ -7,9 +7,13 @@ use std::{
     net::*,
     str::FromStr,
 };
-mod thread_pool;
 
-pub fn start_server(addr: &ServerAddr) -> Result<(), Box<dyn Error>> {
+pub mod thread_pool;
+
+mod poll_server;
+pub use poll_server::start_poll_server;
+
+pub fn start_mt_server(addr: &ServerAddr) -> Result<(), Box<dyn Error>> {
     let pool = thread_pool::ThreadPool::new(4);
 
     let socket = addr.to_socket_addr();
@@ -23,6 +27,7 @@ pub fn start_server(addr: &ServerAddr) -> Result<(), Box<dyn Error>> {
             }
         })
     }
+    println!("exit main loop!");
     Ok(())
 }
 
