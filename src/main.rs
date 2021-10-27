@@ -1,7 +1,7 @@
 use echo_server::ServerAddr;
 use echo_server::start_server;
 use std::process;
-use std::thread;
+mod poll_server;
 fn main() {
     let mut args:Vec<String> = std::env::args().collect();
     if args.len() != 3 {
@@ -11,8 +11,10 @@ fn main() {
         println!("Error: {}", err);
         process::exit(1);
     });
-
-    if let Err(e) = start_server(&addr) {
+    // if let Err(e) = start_server(&addr) {
+    //     println!("Error: {}", e);
+    // }
+    if let Err(e) = poll_server::start_poll_server(&addr) {
         println!("Error: {}", e);
     }
 }

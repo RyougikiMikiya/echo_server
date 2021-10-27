@@ -12,7 +12,7 @@ mod thread_pool;
 pub fn start_server(addr: &ServerAddr) -> Result<(), Box<dyn Error>> {
     let pool = thread_pool::ThreadPool::new(4);
 
-    let socket = SocketAddr::new(IpAddr::V4(addr.addr), addr.port);
+    let socket = addr.to_socket_addr();
     let listener = TcpListener::bind(socket)?;
     println!("echo server is running on {}:{}", addr.addr, addr.port);
     for stream in listener.incoming() {
@@ -55,8 +55,8 @@ fn handle_echo_stream(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
 
 #[derive(Debug)]
 pub struct ServerAddr {
-    addr: Ipv4Addr,
-    port: u16,
+    pub addr: Ipv4Addr,
+    pub port: u16,
 }
 
 impl ServerAddr {
@@ -84,6 +84,9 @@ impl ServerAddr {
             addr: addr,
             port: port,
         })
+    }
+    pub fn to_socket_addr(&self) -> SocketAddr {
+        SocketAddr::new(IpAddr::V4(self.addr), self.port)
     }
 }
 
@@ -133,5 +136,10 @@ mod tests {
             String::from("75534"),
         ];
         assert_matches!(ServerAddr::new(&args3), Err(_));
+    }
+
+    #[test]
+    fn test_to_socket_addr() {
+
     }
 }
