@@ -1,16 +1,36 @@
-use echo_server::ServerAddr;
-use std::process;
+use std::sync::mpsc;
+use std::thread;
+
+struct Person {
+    name: String,
+}
+impl Person {
+    // fn new (name: String) -> Person {
+    //     Person { name: name }
+    // }
+
+    fn new<S: Into<String>>(name: S) -> Person {
+        Person { name: name.into() }
+    }
+}
+
+impl From<String> for Person {
+    fn from(s: String) -> Self {
+        Person { name: s }
+    }
+}
+
+impl From<&str> for Person {
+    fn from(s: &str) -> Self {
+        Person { name: s.into() }
+    }
+}
+
+fn test() {
+    Person::new("sdf");
+    Person::from("sdfs");
+}
 
 fn main() {
-    let mut args:Vec<String> = std::env::args().collect();
-    if args.len() != 3 {
-        args = vec![String::from(""), String::from("127.0.0.1"), String::from("23323")];
-    }
-    let addr = ServerAddr::new(&args).unwrap_or_else(|err| {
-        println!("Error: {}", err);
-        process::exit(1);
-    });
-    if let Err(e) = echo_server::start_poll_server(&addr) {
-        println!("Error: {}", e);
-    }
+    test();
 }

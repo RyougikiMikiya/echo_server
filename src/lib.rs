@@ -21,8 +21,8 @@ pub fn start_mt_server(addr: &ServerAddr) -> Result<(), Box<dyn Error>> {
     println!("echo server is running on {}:{}", addr.addr, addr.port);
     for stream in listener.incoming() {
         let stream = stream?;
-        pool.execute(||{
-            if let Err(e) = handle_echo_stream(stream){
+        pool.execute(|| {
+            if let Err(e) = handle_echo_stream(stream) {
                 println!("Error: {}", e);
             }
         })
@@ -144,7 +144,5 @@ mod tests {
     }
 
     #[test]
-    fn test_to_socket_addr() {
-
-    }
+    fn test_to_socket_addr() {}
 }
